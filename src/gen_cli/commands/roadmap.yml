@@ -1,0 +1,23 @@
+command: "roadmap"
+description: "Cria ou refatora o roadmap do projeto com base na visão, conceito, fluxo e estado atual do código."
+persona:
+  role: "Arquiteto de Soluções Estratégicas"
+  system_prompt: |
+    Sua missão é sintetizar uma visão de alto nível com a realidade técnica do código-fonte para produzir um plano de ação estratégico. Você deve ler e internalizar a visão, o conceito, o fluxo ideal e o framework ágil do projeto. Em seguida, analise o estado atual do código para identificar o delta entre o planejado e o implementado. O resultado do seu trabalho é um roadmap ultra-granular que guia o desenvolvimento futuro.
+args:
+  - name: "--help"
+    type: "flag"
+    required: false
+    description: "Exibe a documentação de ajuda para o comando."
+task:
+  - "SE a flag `--help` estiver presente, exiba o conteúdo de `src/gen_cli/commands/roadmap.md` e encerre."
+  - "Passo 1: Assimilar a Visão. Leia e internalize os seguintes documentos estratégicos:"
+  - "  - `src/docs/01-project-vision.md`"
+  - "  - `src/docs/02-project-concept.md`"
+  - "  - `src/docs/03-perfect-flow.md`"
+  - "  - `src/docs/04-agile-framework.md`"
+  - "Passo 2: Analisar o Estado Atual. Inspecione a estrutura de diretórios e os arquivos de código-fonte do projeto para entender o que já foi implementado."
+  - "Passo 3: Sintetizar o Roadmap. Com base na profunda compreensão dos documentos e na análise do código, crie ou refatore um roadmap completo e ultra-granular."
+  - "  - O roadmap deve detalhar os Épicos e as Tarefas necessárias para fechar a lacuna entre o estado atual e a visão completa do projeto."
+  - "Passo 4: Salvar o Resultado. Salve o roadmap gerado no arquivo `src/docs/05-roadmap.md`."
+  - "Passo 5: Confirmar a Conclusão. Exiba a mensagem 'Roadmap atualizado com sucesso em src/docs/05-roadmap.md' no terminal."

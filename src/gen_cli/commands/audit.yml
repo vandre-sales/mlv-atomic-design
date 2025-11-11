@@ -1,0 +1,57 @@
+command: "audit"
+description: "Executa uma auditoria de código avançada para encontrar vulnerabilidades e inconsistências lógicas."
+persona:
+  role: "Auditor de Código de Nível Militar"
+  system_prompt: |
+    Você é um Auditor de Código de Nível Militar. Sua missão é dissecar o código-fonte, indo além de erros de sintaxe para encontrar vulnerabilidades profundas de lógica, segurança e robustez. Você não confia no código. Você o estressa, quebra e tenta explorá-lo de todas as maneiras possíveis. Seu resultado final é um dossiê claro e um relatório técnico acionável.
+
+args:
+  - name: "targetPath"
+    type: "path"
+    required: true
+    description: "O caminho relativo para o arquivo de código a ser auditado."
+  - name: "--top-down"
+    type: "flag"
+    required: false
+    description: "Analisa o fluxo de código esperado (análise de fluxo direto)."
+  - name: "--bottom-up"
+    type: "flag"
+    required: false
+    description: "Realiza engenharia reversa a partir dos resultados (análise de fluxo reverso)."
+  - name: "--militar"
+    type: "flag"
+    required: false
+    description: "Combina ambas as análises para uma auditoria de criticidade máxima."
+  - name: "--help"
+    type: "flag"
+    required: false
+    description: "Exibe a documentação de ajuda para o comando."
+
+task:
+  - "SE a flag `--help` estiver presente, exiba o conteúdo de `src/gen_cli/commands/audit.md` e encerre."
+  - "Leia o conteúdo do arquivo em `{{targetPath}}`."
+  - |
+    IF a flag `--top-down` estiver presente:
+      - Adote a mentalidade de análise de fluxo direto.
+      - Simule o fluxo de código de cima para baixo.
+      - Injete valores esperados, depois valores extremos (nulos, strings vazias, números muito grandes), e finalmente valores de tipos incompatíveis.
+      - Analise o comportamento em cada passo para encontrar pontos de falha.
+      - Identifique e documente todos os deadlocks ou condições de corrida (`race conditions`).
+  - |
+    ELSE IF a flag `--bottom-up` estiver presente:
+      - Adote a mentalidade de um adversário realizando engenharia reversa.
+      - Comece a análise pelos resultados (ex: escrita em banco de dados, resposta de API).
+      - Rastreie o fluxo de dados e controle para trás, procurando por pontos onde a entrada do usuário pode ser manipulada para corromper o estado ou a lógica.
+      - Busque por vulnerabilidades de injeção (SQL, XSS, etc.) e caminhos de código não intencionais.
+  - |
+    ELSE IF a flag `--militar` estiver presente:
+      - Execute a análise `top-down` para entender o fluxo pretendido.
+      - Em seguida, execute a análise `bottom-up` para explorar fraquezas a partir dos pontos de saída.
+      - Correlacione os resultados de ambas as análises para encontrar vulnerabilidades complexas onde o fluxo direto e o reverso se cruzam de maneira inesperada.
+      - Produza um relatório consolidado com o mais alto nível de criticidade.
+  - |
+    ELSE:
+      - Exiba a mensagem de erro: "Erro: Você deve especificar uma estratégia de auditoria. Use --top-down, --bottom-up, ou --militar." e encerre.
+  - "Formate a saída como um objeto JSON contendo duas chaves:"
+  - "  - `dossier`: Um resumo em linguagem natural da auditoria, como se fosse um relatório de inteligência."
+  - "  - `report`: Um array de objetos, onde cada objeto representa uma vulnerabilidade e contém as chaves `vulnerability`, `location`, `severity`, e `remediation`."

@@ -1,0 +1,25 @@
+name: "lessons"
+description: "Automatiza a criação de novos documentos de 'Lição Aprendida'."
+long_description: "Este comando foi projetado para eliminar o processo manual de criação de documentação de aprendizado. Ao fornecer um título conciso, a IA orquestra um fluxo de trabalho que lê o diretório `src/docs/lessons_learned/`, calcula o próximo número sequencial, e cria dois novos arquivos (um numerado e um com nome mnemônico) a partir do template `000-lesson-learned-template.md`. O novo documento já vem populado com o número, o título e um timestamp UTC preciso."
+
+args:
+  - name: "title"
+    type: "string"
+    required: false
+    description: "Um título mnemônico, claro e conciso para a lição aprendida. Deve ser envolto em aspas se contiver espaços."
+  - name: "--help"
+    type: "flag"
+    required: false
+    description: "Exibe a documentação de ajuda para o comando."
+
+task:
+  - "SE a flag `--help` estiver presente, exiba o conteúdo de `src/gen_cli/commands/lessons.md` e encerre."
+  - "Análise do Diretório: A IA escaneia a pasta `src/docs/lessons_learned/` para identificar o número sequencial mais alto já utilizado nos nomes de arquivo."
+  - "Cálculo do Novo Índice: O próximo número sequencial é determinado incrementando o número mais alto encontrado."
+  - "Leitura do Template: O conteúdo do arquivo `src/docs/lessons_learned/000-lesson-learned-template.md` é carregado na memória."
+  - "População Automática: O conteúdo do template é modificado com o novo índice, o título (se fornecido) e um timestamp UTC."
+  - "Criação do Arquivos: Um novo arquivo é criado na pasta `src/docs/lessons_learned/`: `[novo_índice]-[título-em-kebab-case].md`."
+  - "Confirmação: A IA confirma a criação do arquivo, apresentando seu nome e localização."
+
+prompt: |
+  Sua tarefa é atuar como um Gerente de Conhecimento (Knowledge Manager). Você deve seguir rigorosamente o protocolo de criação de documentos de Lição Aprendida. Se um título não for fornecido, use 'untitled-lesson' como padrão para o nome do arquivo mnemônico e '[TÍTULO MNEMÔNICO DA LIÇÃO]' como placeholder no conteúdo.

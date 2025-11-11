@@ -1,0 +1,20 @@
+# gen-cli AI Command Manifest
+# Version: 2.2
+# Description: Manifesto orquestrador para a Interface de Linha de Comando da IA (gen-cli).
+
+# Este arquivo importa e agrega todos os manifestos de comando individuais.
+# Para adicionar ou modificar um comando, edite o arquivo .yml correspondente
+# no diretório 'commands/'.
+
+imports:
+  - "commands/anytomd.yml"
+  - "commands/audit.yml"
+  - "commands/hardcore.yml"
+  - "commands/lessons.yml"
+  - "commands/mdtoyml.yml"
+  - "commands/persona.yml"
+  - "commands/refactor.yml"
+  - "commands/roadmap.yml"
+  - "commands/start.yml"
+  - "commands/status.yml"
+  - "commands/tutorial.yml"

@@ -1,0 +1,42 @@
+command: "mdtoyml"
+description: "Converte um arquivo Markdown estruturado em um manifesto YAML, se a estrutura for compatível."
+persona:
+  role: "Engenheiro de Análise Estrutural"
+  system_prompt: |
+    Sua missão principal é analítica. Antes de qualquer conversão, você deve primeiro avaliar se o conteúdo do Markdown de entrada possui uma estrutura hierárquica clara (cabeçalhos, listas, pares chave-valor implícitos). Prosa, texto de fluxo livre ou documentos não estruturados não são candidatos à conversão. Somente após uma avaliação positiva você procederá com a conversão para YAML, mantendo a estrutura inferida de forma limpa e legível.
+
+args:
+  - name: "sourcePath"
+    type: "path"
+    required: true
+    description: "O caminho relativo para o arquivo .md de origem a ser analisado e convertido."
+  - name: "outputPath"
+    type: "path"
+    required: false
+    description: "O caminho para salvar o arquivo .yml resultante. Se omitido, o nome do arquivo de origem será usado com a extensão .yml."
+  - name: "--print"
+    type: "flag"
+    required: false
+    description: "Se presente, exibe o resultado no terminal em vez de salvar em um arquivo."
+  - name: "--help"
+    type: "flag"
+    required: false
+    description: "Exibe a documentação de ajuda para o comando."
+
+task:
+  - "SE a flag `--help` estiver presente, exiba o conteúdo de `src/gen_cli/commands/mdtoyml.md` e encerre."
+  - "Leia o conteúdo do arquivo em `sourcePath`."
+  - "Execute uma análise estrutural no conteúdo do Markdown. Determine se ele contém uma hierarquia clara (títulos, listas, etc.) que pode ser mapeada para um formato chave-valor, ou se é apenas prosa."
+  - |
+    IF a estrutura é compatível:
+      - Inferir uma estrutura de dados hierárquica a partir dos cabeçalhos, listas e tabelas.
+      - Converta essa estrutura em uma sintaxe YAML válida e bem formatada.
+      - CHECK a flag `--print`.
+        - IF `--print` is present:
+          - Exiba o YAML resultante diretamente no terminal.
+        - ELSE:
+          - DETERMINE o caminho de saída. Se `outputPath` for fornecido, use-o.
+          - OTHERWISE, use o nome do `sourcePath` mas com a extensão `.yml`.
+          - Salve o resultado no caminho de saída determinado.
+    ELSE (a estrutura não é compatível):
+      - Reporte o erro: "O arquivo de origem não possui uma estrutura hierárquica conversível para YAML."

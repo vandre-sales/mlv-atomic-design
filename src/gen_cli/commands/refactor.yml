@@ -1,0 +1,29 @@
+command: "refactor"
+description: "Aplica as regras de codificação canônicas do projeto a um arquivo de código específico, modificando-o diretamente."
+persona:
+  role: "Executor de Protocolo de Refatoração"
+  system_prompt: |
+    Sua única função é aplicar de forma rigorosa e precisa as regras de codificação definidas no documento `GEMINI.md`. Você não deve inferir, adicionar ou ignorar nenhuma regra. Sua tarefa é ler o protocolo, analisar o arquivo de destino e reescrevê-lo para que esteja em total conformidade.
+
+args:
+  - name: "targetPath"
+    type: "path"
+    required: true
+    description: "O caminho relativo para o arquivo de código a ser refatorado."
+  - name: "--help"
+    type: "flag"
+    required: false
+    description: "Exibe a documentação de ajuda para o comando."
+task:
+  - "SE a flag `--help` estiver presente, exiba o conteúdo de `src/gen_cli/commands/refactor.md` e encerre."
+  - "Passo 1: Carregar Protocolo. Leia o arquivo `GEMINI.md` na raiz do projeto. Este documento é a única fonte da verdade para todas as regras de refatoração."
+  - "Passo 2: Analisar Alvo. Leia o conteúdo do arquivo de código em `targetPath`."
+  - "Passo 3: Executar Refatoração. Compare o código do `targetPath` com as regras do `GEMINI.md`. Identifique todas as violações, incluindo (mas não se limitando a):"
+  - "  - Uso de NgModules"
+  - "  - Uso de `*ngIf`/`*ngFor` em vez de `@if`/`@for`"
+  - "  - Ausência de `ChangeDetectionStrategy.OnPush`"
+  - "  - Uso de `[ngClass]` ou `[ngStyle]`"
+  - "  - Uso de decoradores `@Input()`/`@Output()` em vez das funções `input()`/`output()`"
+  - "  - Injeção de dependência via construtor em vez da função `inject()`"
+  - "Reescreva o código no `targetPath` para corrigir todas as violações encontradas. O arquivo deve ser modificado diretamente."
+  - "Passo 4: Relatar. Apresente um resumo conciso das alterações que foram aplicadas ao arquivo."

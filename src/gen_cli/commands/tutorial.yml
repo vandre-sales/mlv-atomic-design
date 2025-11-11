@@ -1,0 +1,30 @@
+name: "tutorial"
+description: "Cria um tutorial passo a passo, numerado e com timestamp, a partir de um template."
+long_description: "Este comando automatiza e padroniza a criação de novos tutoriais. Ele calcula o próximo número sequencial, cria dois arquivos (um numerado e um com nome mnemônico) a partir do template `000-tutorial-template.md`, e popula os metadados (ID, Título, Timestamp) antes que a IA gere o conteúdo técnico."
+
+args:
+  - name: "--topic"
+    type: "string"
+    required: true
+    description: "O tema central ou o título do tutorial a ser criado."
+  - name: "--source"
+    type: "path"
+    required: false
+    description: "Opcional. O caminho para um arquivo que servirá de contexto ou base para o tutorial."
+  - name: "--help"
+    type: "flag"
+    required: false
+    description: "Exibe a documentação de ajuda para o comando."
+
+task:
+  - "SE a flag `--help` estiver presente, exiba o conteúdo de `src/gen_cli/commands/tutorial.md` e encerre."
+  - "Análise do Diretório: A IA escaneia `src/docs/tutorials/` para encontrar o maior ID sequencial."
+  - "Cálculo do Novo Índice: O novo ID é determinado incrementando o maior ID encontrado."
+  - "Leitura do Template: O conteúdo de `src/docs/tutorials/000-tutorial-template.md` é carregado."
+  - "População de Metadados: O template é preenchido com o novo ID, o `topic` e um timestamp UTC."
+  - "Geração do Conteúdo: A IA desenvolve o conteúdo do tutorial com base no `topic` e no `sourcePath`."
+  - "Criação do Arquivo: Um novo arquivo é criado em `src/docs/tutorials/`: `[novo_índice]-[tópico-em-kebab-case].md`."
+  - "Confirmação: A IA reporta a criação bem-sucedida do arquivo."
+
+prompt: |
+  Você é um Escritor Técnico e Gerente de Conhecimento. Sua tarefa é executar o protocolo de criação de tutoriais. Primeiro, popule os metadados (ID, Título, Timestamp) do template `000-tutorial-template.md`. Em seguida, usando o `topic` e o `sourcePath` (se disponível), gere um tutorial ultra-granular, seguindo rigorosamente a estrutura de Épicos e Partes definida no template.

@@ -1,0 +1,29 @@
+command: "status"
+description: "Fornece uma visão geral do estado atual do projeto, lendo e interpretando o arquivo src/docs/06-status.md."
+persona:
+  role: "Gerente de Projeto"
+  system_prompt: "Sua tarefa é atuar como um Gerente de Projeto. Leia e analise o arquivo src/docs/06-status.md, reporte o status (em andamento ou bloqueado), liste os próximos passos ou explique os bloqueios e, se a flag --sync for usada, sincronize o status com o código-fonte real, atualizando o arquivo para refletir com precisão a implementação das funcionalidades. Além disso, gere a árvore de diretórios do projeto e salve em src/docs/07-project-tree.md."
+
+args:
+  - name: "--sync"
+    type: "flag"
+    required: false
+    description: "Sincroniza o arquivo de status com o estado real do código-fonte."
+  - name: "--help"
+    type: "flag"
+    required: false
+    description: "Exibe a documentação de ajuda para o comando."
+
+task:
+  - "SE a flag `--help` estiver presente, exiba o conteúdo de `src/gen_cli/commands/status.md` e encerre."
+  - "Leia o conteúdo do arquivo `src/docs/06-status.md`."
+  - "Analise o status geral do projeto (Em andamento, Bloqueado)."
+  - "SE o status for 'Em andamento':"
+  - "  Liste as próximas tarefas planejadas."
+  - "ELSE SE o status for 'Bloqueado':"
+  - "  Explique a causa do bloqueio e sugira os passos necessários para o desbloqueio."
+  - "SE a flag `--sync` estiver presente:"
+  - "  Escaneie o código-fonte para verificar se as tarefas marcadas como 'concluídas' no arquivo .md correspondem a funcionalidades implementadas."
+  - "  GERE A ARVORE DE DIRETORIOS E ARQUIVOS DE `/home/user/mlv-atomic-angular/*` E ATUALIZE O ARQUIVO `src/docs/07-project-tree.md`."
+  - "  Atualize o arquivo `src/docs/06-status.md` para corrigir quaisquer discrepâncias encontradas."
+  - "  Apresente um resumo das alterações feitas no arquivo de status."

@@ -1,0 +1,23 @@
+command: "start"
+description: "Lista artefatos de um determinado tipo no projeto."
+persona:
+  role: "Indexador de Código"
+  description: "Sua função é escanear o projeto e catalogar rapidamente os diferentes tipos de artefatos de código."
+args:
+  - name: "artifactType"
+    type: "enum"
+    required: true
+    description: "O tipo de artefato a ser listado."
+    options:
+      - { name: "components", description: "Lista todos os @Component." }
+      - { name: "services", description: "Lista todos os @Injectable." }
+      - { name: "routes", description: "Lista as definições de rotas." }
+      - { name: "pipes", description: "Lista todos os @Pipe." }
+  - name: "--help"
+    type: "flag"
+    required: false
+    description: "Exibe a documentação de ajuda para o comando."
+task:
+  - "SE a flag `--help` estiver presente, exiba o conteúdo de `src/gen_cli/commands/start.md` e encerre."
+  - "Escanear a base de código em busca de arquivos que correspondam ao `{{artifactType}}`."
+  - "Exibir uma lista dos caminhos dos arquivos encontrados."
