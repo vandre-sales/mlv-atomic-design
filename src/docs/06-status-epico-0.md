@@ -1,7 +1,3 @@
-## Legenda de Status
-- [✅] **Concluído:** Todas as tarefas do Épico/Parte/Tarefa/Passo foram finalizadas.
-- [🟨] **Pendente:** Existem Épico/Parte/Tarefa/Passo pendentes ou em progresso.
-
 ### [🟨] Épico 0: A Fundação Inabalável (A "Máquina Invisível" - Leis 1 & 2)
 *Propósito: Construir o sistema nervoso central e os serviços de contexto global. O resultado é um esqueleto de aplicação reativo, mas sem UI de Produto.*
 
@@ -64,10 +60,8 @@
 #### [🟨] Parte 0.2: Definição do DNA (A Fonte da Verdade)
 
 - [✅] **Tarefa 0.2.1:** Definir os Contratos de Dados (`design-tokens.interface.ts`).
-  - [✅] **Passo 0.2.1.1:** Criar o arquivo `design-tokens.interface.ts`.
-  - [✅] **Passo 0.2.1.2:** Definir a interface `IDesignTokens` com as propriedades `primitives` e `semantics`.
-  - [✅] **Passo 0.2.1.3:** Definir a interface `IPrimitiveTokens`.
-  - [✅] **Passo 0.2.1.4:** Definir a interface `ISemanticTokens`.
+  - [✅] **Passo 0.2.1.1:** Criar `design-tokens.interface.ts`.
+  - [✅] **Passo 0.2.1.2:** Definir as interfaces para `IDesignTokens`, `IPrimitiveTokens`, `ISemanticTokens`, etc.
 
 - [✅] **Tarefa 0.2.2:** Criar arquivos de "Sementes" Primitivas (`primitive-base-colors.ts`, `primitive-spacing.ts`).
   - [✅] **Passo 0.2.2.1:** Criar `primitive-base-colors.ts` e exportar apenas os tons `500` (cores mestras).

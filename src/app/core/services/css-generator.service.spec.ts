@@ -2,7 +2,7 @@
 import { TestBed } from '@angular/core/testing';
 import { CssGeneratorService } from './css-generator.service';
 import { TokenResolverService } from './token-resolver.service';
-import { IDesignTokens } from './token-state.service';
+import { IDesignTokens } from '../data/contracts/design-tokens.interface';
 
 describe('CssGeneratorService', () => {
   let service: CssGeneratorService;
@@ -53,7 +53,7 @@ describe('CssGeneratorService', () => {
   });
 
   it('deve retornar uma string vazia se os tokens forem nulos ou incompletos', () => {
-    expect(service.generateCssString({})).toBe('');
+    expect(service.generateCssString({} as any)).toBe('');
     expect(service.generateCssString({ primitives: {} } as any)).toBe('');
     expect(service.generateCssString({ semantics: {} } as any)).toBe('');
   });

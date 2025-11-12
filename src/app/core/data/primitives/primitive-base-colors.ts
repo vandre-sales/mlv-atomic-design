@@ -1,4 +1,4 @@
-// src/app/core/tokens/primitive-base-colors.ts
+// src/app/core/data/primitives/primitive-base-colors.ts
 
 /**
  * Cores Primitivas Mestras (Sementes)

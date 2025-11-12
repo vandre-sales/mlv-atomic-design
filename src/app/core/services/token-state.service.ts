@@ -1,7 +1,7 @@
 // src/app/core/services/token-state.service.ts
 import { Injectable, signal, effect, inject } from '@angular/core';
 import { PersistenceService } from './persistence.service';
-import { IDesignTokens } from '../models/design-tokens.interface';
+import { IDesignTokens } from '../data/contracts/design-tokens.interface';
 
 @Injectable({
   providedIn: 'root',

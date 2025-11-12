@@ -1,6 +1,6 @@
 // src/app/core/services/token-resolver.service.ts
 import { Injectable } from '@angular/core';
-import { IDesignTokens } from '../models/design-tokens.interface';
+import { IDesignTokens } from '../data/contracts/design-tokens.interface';
 
 @Injectable({
   providedIn: 'root',

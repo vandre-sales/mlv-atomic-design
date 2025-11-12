@@ -1,4 +1,4 @@
-// src/app/core/tokens/primitive-spacing.ts
+// src/app/core/data/primitives/primitive-spacing.ts
 
 /**
  * Escala de Espaçamento Primitivo

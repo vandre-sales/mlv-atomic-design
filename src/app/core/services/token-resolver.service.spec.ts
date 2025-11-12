@@ -1,11 +1,11 @@
 // src/app/core/services/token-resolver.service.spec.ts
 import { TestBed } from '@angular/core/testing';
 import { TokenResolverService } from './token-resolver.service';
-import { IDesignTokens } from './token-state.service';
+import { IDesignTokens } from '../data/contracts/design-tokens.interface';
 
 describe('TokenResolverService', () => {
   let service: TokenResolverService;
-  const mockTokens: IDesignTokens = {}; // Mock, pois a função é pura e não depende dele atualmente.
+  const mockTokens: IDesignTokens = {} as IDesignTokens; // Mock, pois a função é pura e não depende dele atualmente.
 
   beforeEach(() => {
     TestBed.configureTestingModule({

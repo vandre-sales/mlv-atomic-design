@@ -1,4 +1,4 @@
-// src/app/core/tokens/primitive-typography.ts
+// src/app/core/data/primitives/primitive-typography.ts
 
 /**
  * Tipografia Primitiva (Placeholder)

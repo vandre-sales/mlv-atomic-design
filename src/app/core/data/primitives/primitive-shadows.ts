@@ -1,4 +1,4 @@
-// src/app/core/tokens/primitive-shadows.ts
+// src/app/core/data/primitives/primitive-shadows.ts
 
 /**
  * Sombras Primitivas (Placeholder)

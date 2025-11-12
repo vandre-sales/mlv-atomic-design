@@ -3,13 +3,14 @@ import { TestBed } from '@angular/core/testing';
 import { TokenOrchestratorService } from './token-orchestrator.service';
 import { TokenStateService } from './token-state.service';
 import { PaletteGenerationService } from './palette-generation.service';
+import { IDesignTokens } from '../data/contracts/design-tokens.interface';
 
 describe('TokenOrchestratorService', () => {
   let service: TokenOrchestratorService;
   let tokenState: TokenStateService;
   let paletteGenerator: PaletteGenerationService;
 
-  const initialTokens = {
+  const initialTokens: IDesignTokens = {
     primitives: {
       colors: {
         blue: {

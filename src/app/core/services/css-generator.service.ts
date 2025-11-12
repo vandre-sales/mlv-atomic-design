@@ -1,6 +1,6 @@
 // src/app/core/services/css-generator.service.ts
 import { Injectable, inject } from '@angular/core';
-import { IDesignTokens, IPrimitiveTokens, ISemanticTokens } from '../models/design-tokens.interface';
+import { IDesignTokens, IPrimitiveTokens, ISemanticTokens } from '../data/contracts/design-tokens.interface';
 import { TokenResolverService } from './token-resolver.service';
 
 @Injectable({

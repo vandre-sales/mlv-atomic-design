@@ -2,7 +2,7 @@
 import { Injectable, inject } from '@angular/core';
 import { TokenStateService } from './token-state.service';
 import { PaletteGenerationService } from './palette-generation.service';
-import { IDesignTokens } from '../models/design-tokens.interface';
+import { IDesignTokens } from '../data/contracts/design-tokens.interface';
 
 @Injectable({
   providedIn: 'root',
