@@ -3,31 +3,13 @@ import { TestBed } from '@angular/core/testing';
 import { CssGeneratorService } from './css-generator.service';
 import { TokenResolverService } from './token-resolver.service';
 import { IDesignTokens } from '../data/contracts/design-tokens.interface';
+import { mockDesignTokens } from '../data/mocks/mock-design-tokens'; // Mock importado
 
 describe('CssGeneratorService', () => {
   let service: CssGeneratorService;
 
-  const mockTokens: IDesignTokens = {
-    primitives: {
-      colors: {
-        blue: {
-          '500': '#3b82f6',
-        },
-        neutral: {
-          'white': '#ffffff',
-        }
-      },
-      spacing: {
-        'sm': '8px',
-      }
-    },
-    semantics: {
-      colors: {
-        'backgroundPrimary': 'neutral.white',
-        'colorPrimary': 'blue.500',
-      }
-    }
-  };
+  // Usa o mock importado e completo
+  const validMockTokens: IDesignTokens = mockDesignTokens;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -41,15 +23,26 @@ describe('CssGeneratorService', () => {
   });
 
   it('deve gerar variáveis primitivas de cor e espaçamento', () => {
-    const css = service.generateCssString(mockTokens);
+    const css = service.generateCssString(validMockTokens);
     expect(css).toContain('--mlv-color-blue-500: #3b82f6;');
-    expect(css).toContain('--mlv-space-sm: 8px;');
+    expect(css).toContain('--mlv-spacing-sm: 8px;');
   });
   
   it('deve gerar variáveis semânticas resolvendo aliases', () => {
-    const css = service.generateCssString(mockTokens);
-    expect(css).toContain('--color-background-primary: var(--mlv-color-neutral-white);');
-    expect(css).toContain('--color-primary: var(--mlv-color-blue-500);');
+    const css = service.generateCssString(validMockTokens);
+    // As chaves agora seguem o novo padrão
+    expect(css).toContain('--color-background-primary: var(--mlv-color-neutral-100);');
+    expect(css).toContain('--color-text-accent: var(--mlv-color-blue-500);');
+  });
+
+  it('deve gerar variáveis de tipografia e sombra', () => {
+    const css = service.generateCssString(validMockTokens);
+    // Verifica a geração de primitivas de tipografia e sombra
+    expect(css).toContain('--mlv-font-family-sans: "Inter", sans-serif;');
+    expect(css).toContain('--mlv-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);');
+    // Verifica a geração de semânticas de tipografia e sombra
+    expect(css).toContain('--typography-heading-1-font-family: var(--mlv-font-family-sans);');
+    expect(css).toContain('--shadow-card: var(--mlv-shadow-md);');
   });
 
   it('deve retornar uma string vazia se os tokens forem nulos ou incompletos', () => {

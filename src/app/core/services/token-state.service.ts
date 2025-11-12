@@ -2,42 +2,47 @@
 import { Injectable, signal, effect, inject } from '@angular/core';
 import { PersistenceService } from './persistence.service';
 import { IDesignTokens } from '../data/contracts/design-tokens.interface';
+import { PaletteGenerationService } from './palette-generation.service';
+import { buildDefaultTokens } from '../data/default-tokens';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TokenStateService {
   private persistenceService = inject(PersistenceService);
+  private paletteGenerationService = inject(PaletteGenerationService);
 
   // Definição da signal privada que armazena o estado
-  private tokens = signal<IDesignTokens>({} as IDesignTokens);
+  private tokensSignal = signal<IDesignTokens>({} as IDesignTokens);
 
   // Exposição da signal pública como readonly para proteger a escrita
-  public readonly tokensAsReadonly = this.tokens.asReadonly();
+  public readonly tokens = this.tokensSignal.asReadonly();
 
   constructor() {
     this.hydrateState();
 
     // Efeito que reage a qualquer mudança nos tokens e os persiste
     effect(() => {
-      this.persistenceService.setItem('design-tokens', this.tokens());
+      const currentTokens = this.tokens();
+      // Evita persistir o estado inicial vazio antes da hidratação
+      if (Object.keys(currentTokens).length > 0) {
+        this.persistenceService.setItem('design-tokens', currentTokens);
+      }
     });
   }
 
   /**
    * Hidrata o estado dos tokens a partir do localStorage.
-   * Se não houver dados, inicializa com um estado padrão (a ser implementado).
+   * Se não houver dados, constrói e inicializa com o estado padrão.
    */
   private hydrateState(): void {
     const storedTokens = this.persistenceService.getItem<IDesignTokens>('design-tokens');
     if (storedTokens) {
-      this.tokens.set(storedTokens);
+      this.tokensSignal.set(storedTokens);
     } else {
-      // TODO: Chamar a função `buildDefaultTokens()` que será criada na Parte 0.2
-      this.tokens.set({ 
-        primitives: { colors: {}, spacing: {} }, 
-        semantics: { colors: {} } 
-      }); // Estado inicial provisório
+      // Constrói o estado inicial completo usando o agregador e o gerador de paleta
+      const defaultTokens = buildDefaultTokens(this.paletteGenerationService);
+      this.tokensSignal.set(defaultTokens);
     }
   }
 
@@ -46,6 +51,6 @@ export class TokenStateService {
    * @param newTokens O novo objeto de tokens.
    */
   public updateTokens(newTokens: IDesignTokens): void {
-    this.tokens.set(newTokens);
+    this.tokensSignal.set(newTokens);
   }
 }

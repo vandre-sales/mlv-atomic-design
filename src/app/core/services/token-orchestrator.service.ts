@@ -17,7 +17,7 @@ export class TokenOrchestratorService {
    * @param newValue O novo valor para o token.
    */
   public updateTokenValue(path: string, newValue: any): void {
-    const currentTokens = this.tokenState.tokensAsReadonly();
+    const currentTokens = this.tokenState.tokens();
     const newTokens: IDesignTokens = JSON.parse(JSON.stringify(currentTokens)); // Deep copy
 
     // Lógica de Negócios: Se a atualização for em uma cor base, regenere a paleta inteira.

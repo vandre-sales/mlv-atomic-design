@@ -1,6 +1,15 @@
 // src/app/core/services/css-generator.service.ts
 import { Injectable, inject } from '@angular/core';
-import { IDesignTokens, IPrimitiveTokens, ISemanticTokens } from '../data/contracts/design-tokens.interface';
+import { 
+  IDesignTokens, 
+  IPrimitiveTokens, 
+  ISemanticTokens, 
+  SemanticColorKeys,
+  SemanticSpacingKeys,
+  SemanticShadowsKeys,
+  SemanticTypographyKeys,
+  ITypographyValue
+} from '../data/contracts/design-tokens.interface';
 import { TokenResolverService } from './token-resolver.service';
 
 @Injectable({
@@ -9,9 +18,6 @@ import { TokenResolverService } from './token-resolver.service';
 export class CssGeneratorService {
   private tokenResolver = inject(TokenResolverService);
 
-  /**
-   * Gera a string CSS completa a partir do objeto de design tokens.
-   */
   public generateCssString(tokens: IDesignTokens): string {
     if (!tokens || !tokens.primitives || !tokens.semantics) {
       return '';
@@ -19,75 +25,82 @@ export class CssGeneratorService {
 
     const primitiveCss = this.generatePrimitiveVariables(tokens.primitives);
     const semanticCss = this.generateSemanticVariables(tokens.semantics, tokens);
-    
-    // Stubs para futuras implementações
-    const buttonCss = this.generateButtonStyles(tokens);
-    const markdownCss = this.generateMarkdownStyles(tokens);
 
-    return `
-:root {
-${primitiveCss}
-${semanticCss}
-}
-
-${buttonCss}
-${markdownCss}
-    `.trim();
+    return `:root {\n${primitiveCss}${semanticCss}}\n`;
   }
 
-  /**
-   * Gera as variáveis CSS da camada privada (ex: --mlv-color-blue-500: #3b82f6;).
-   */
   private generatePrimitiveVariables(primitives: IPrimitiveTokens): string {
-    let cssText = '  /* Primitive Tokens */\n';
+    let css = '  /* --- Primitives --- */\n';
     
-    // Processa cores
-    if (primitives.colors) {
-      for (const category in primitives.colors) {
-        for (const shade in primitives.colors[category]) {
-          const varName = `--mlv-color-${category}-${shade}`;
-          cssText += `  ${varName}: ${primitives.colors[category][shade]};\n`;
-        }
+    // Cores
+    for (const color in primitives.colors) {
+      for (const shade in primitives.colors[color]) {
+        css += `  --mlv-color-${color}-${shade}: ${primitives.colors[color][shade]};\n`;
       }
     }
-    
-    // Processa espaçamento
-    if (primitives.spacing) {
-        for (const key in primitives.spacing) {
-            const varName = `--mlv-space-${key}`;
-            cssText += `  ${varName}: ${primitives.spacing[key]};\n`;
-        }
+    // Espaçamento
+    for (const key in primitives.spacing) {
+      css += `  --mlv-spacing-${key}: ${primitives.spacing[key]};\n`;
     }
-
-    return cssText;
+    // Sombras
+    for (const key in primitives.shadows) {
+      css += `  --mlv-shadow-${key}: ${primitives.shadows[key]};\n`;
+    }
+    // Tipografia (família, peso, etc.)
+    for (const key in primitives.typography.font) {
+      css += `  --mlv-font-family-${key}: ${primitives.typography.font[key]};\n`;
+    }
+    for (const key in primitives.typography.weight) {
+      css += `  --mlv-font-weight-${key}: ${primitives.typography.weight[key]};\n`;
+    }
+    for (const key in primitives.typography.lineHeight) {
+      css += `  --mlv-line-height-${key}: ${primitives.typography.lineHeight[key]};\n`;
+    }
+    for (const category in primitives.typography.size) {
+      for (const key in primitives.typography.size[category]) {
+        css += `  --mlv-size-${category}-${key}: ${primitives.typography.size[category][key]};\n`;
+      }
+    }
+    return css;
   }
 
-  /**
-   * Gera as variáveis CSS da camada pública/semântica (ex: --color-primary: var(--mlv-color-blue-500);).
-   */
   private generateSemanticVariables(semantics: ISemanticTokens, allTokens: IDesignTokens): string {
-    let cssText = '  /* Semantic Tokens */\n';
-
-    if (semantics.colors) {
-      for (const key in semantics.colors) {
-        const alias = semantics.colors[key];
-        // O nome da variável semântica é convertida para kebab-case. Ex: backgroundPrimary -> --color-background-primary
-        const varName = `--color-${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
-        const resolvedValue = this.tokenResolver.resolveTokenAlias(alias, allTokens);
-        cssText += `  ${varName}: ${resolvedValue};\n`;
+    let css = '  /* --- Semantics --- */\n';
+    
+    // Cores
+    for (const key in semantics.colors) {
+      const token = semantics.colors[key as SemanticColorKeys];
+      const resolvedValue = this.tokenResolver.resolveTokenValue(token.value, allTokens);
+      css += `  --${key}: ${resolvedValue};\n`;
+    }
+    // Espaçamento
+    for (const key in semantics.spacing) {
+      const token = semantics.spacing[key as SemanticSpacingKeys];
+      const resolvedValue = this.tokenResolver.resolveTokenValue(token.value, allTokens);
+      css += `  --${key}: ${resolvedValue};\n`;
+    }
+    // Sombras
+    for (const key in semantics.shadows) {
+      const token = semantics.shadows[key as SemanticShadowsKeys];
+      const resolvedValue = this.tokenResolver.resolveTokenValue(token.value, allTokens);
+      css += `  --${key}: ${resolvedValue};\n`;
+    }
+    // Tipografia (gera um grupo de variáveis para cada token)
+    for (const key in semantics.typography) {
+      const token = semantics.typography[key as SemanticTypographyKeys];
+      const typographyValue = token.value as ITypographyValue;
+      
+      for (const prop in typographyValue) {
+        const value = typographyValue[prop as keyof ITypographyValue];
+        const resolvedValue = this.tokenResolver.resolveTokenValue(value, allTokens);
+        css += `  --${key}-${this.toKebabCase(prop)}: ${resolvedValue};\n`;
       }
     }
+    return css;
+  }
 
-    return cssText;
-  }
-  
-  // Placeholder para Épico 2
-  private generateButtonStyles(tokens: IDesignTokens): string {
-    return '/* Button component styles will be generated here */';
-  }
-  
-  // Placeholder para Épico 2
-  private generateMarkdownStyles(tokens: IDesignTokens): string {
-    return '/* Markdown component styles will be generated here */';
+  // Função utilitária para converter camelCase para kebab-case
+  private toKebabCase(str: string): string {
+    return str.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
   }
 }

@@ -4,27 +4,12 @@ import { TokenOrchestratorService } from './token-orchestrator.service';
 import { TokenStateService } from './token-state.service';
 import { PaletteGenerationService } from './palette-generation.service';
 import { IDesignTokens } from '../data/contracts/design-tokens.interface';
+import { mockDesignTokens } from '../data/mocks/mock-design-tokens';
 
 describe('TokenOrchestratorService', () => {
   let service: TokenOrchestratorService;
   let tokenState: TokenStateService;
   let paletteGenerator: PaletteGenerationService;
-
-  const initialTokens: IDesignTokens = {
-    primitives: {
-      colors: {
-        blue: {
-          '500': '#0000ff'
-        },
-      },
-      spacing: {
-        sm: '8px'
-      }
-    },
-    semantics: {
-      colors: {}
-    }
-  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -38,8 +23,9 @@ describe('TokenOrchestratorService', () => {
     tokenState = TestBed.inject(TokenStateService);
     paletteGenerator = TestBed.inject(PaletteGenerationService);
 
-    // Define um estado inicial para os tokens antes de cada teste
-    tokenState.updateTokens(JSON.parse(JSON.stringify(initialTokens)));
+    // Define um estado inicial válido para os tokens antes de cada teste
+    // Usamos JSON.parse(stringify(...)) para garantir uma cópia profunda e evitar que os testes interfiram uns com os outros
+    tokenState.updateTokens(JSON.parse(JSON.stringify(mockDesignTokens)));
   });
 
   it('should be created', () => {

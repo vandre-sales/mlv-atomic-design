@@ -17,7 +17,7 @@ export class DesignTokenService {
     // Este effect orquestra todo o pipeline de atualização de estilo.
     effect(() => {
       // 1. Ouve o estado dos tokens.
-      const currentTokens = this.tokenState.tokensAsReadonly();
+      const currentTokens = this.tokenState.tokens();
 
       // 2. Passa os tokens para o gerador de CSS.
       const cssString = this.cssGenerator.generateCssString(currentTokens);
